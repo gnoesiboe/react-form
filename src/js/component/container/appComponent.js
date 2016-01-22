@@ -38,18 +38,30 @@ class AppComponent extends React.Component {
             <div className="row">
                 <div className="col-xs-12">
                     <FormComponent onSubmit={this._onFormSubmit.bind(this)}>
-                        <div className="form-group">
-                            <div className="col-sm-6">
+                        <div className="col-sm-6">
+                            <div className="form-group">
                                 <label htmlFor="first-name-field">First name</label>
                                 <FormInputComponent identifier="first-name" />
                             </div>
-                            <div className="col-sm-6">
-                                <label htmlFor="second-input-field">Second input</label>
-                                <FormInputComponent identifier="second-input" />
+                        </div>
+
+                        <div className="col-sm-6">
+                            <div className="form-group">
+                                <label htmlFor="last-name-field">Last name</label>
+                                <FormInputComponent identifier="last-name" />
                             </div>
                         </div>
 
-                        <button type="submit">Submit</button>
+                        <div className="col-sm-12">
+                            <div className="form-group">
+                                <label htmlFor="street-field">Street</label>
+                                <FormInputComponent identifier="street" />
+                            </div>
+                        </div>
+
+                        <div className="col-sm-12 text-right">
+                            <button type="submit" className="btn btn-success">Submit</button>
+                        </div>
                     </FormComponent>
                 </div>
             </div>

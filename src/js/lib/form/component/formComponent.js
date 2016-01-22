@@ -131,7 +131,11 @@ class FormComponent extends React.Component {
      */
     render() {
         return (
-            <form action="#" method="POST" className="form" onSubmit={this._onSubmit.bind(this)}>
+            <form action="#"
+                  method="POST"
+                  className="form"
+                  onSubmit={this._onSubmit.bind(this)}>
+
                 {this._augmentChildren(this.props.children)}
             </form>
         );
