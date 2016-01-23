@@ -108,7 +108,7 @@ class FormComponent extends React.Component {
         var callback = this._onFieldChange.bind(this);
 
         return React.Children.map(children, child => {
-            if (_.isFunction(child.type)) {
+            if (typeof child.type !== 'undefinded' && _.isFunction(child.type)) {
                 if (FormComponent._checkIsFormElement(child.type)) {
                     child = React.cloneElement(child, {
                         onValueChange: callback

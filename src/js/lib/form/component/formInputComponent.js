@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import FormElementComponent from './formElementComponent';
+import { generateFormElementId } from './../helper/identifierHelper';
 
 /**
  * @author Gijs Nieuwenhuis <gijs.nieuwenhuis@freshheads.com>
@@ -45,7 +46,7 @@ class FormInputComponent extends FormElementComponent {
         return (
             <input type={this.props.type}
                    name={this.props.identifier}
-                   id={this.props.identifier + '-field'}
+                   id={generateFormElementId(this.props.identifier)}
                    value={this.state.value}
                    onChange={this._onChange.bind(this)}
                    className="form-control" />
