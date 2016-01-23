@@ -17,6 +17,21 @@ class FormComponent extends React.Component {
         this.state = {
             values: {}
         };
+
+        this._childrenBlueprints = null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    componentDidMount() {
+        var newValues = _.extend({}, this.state.values, this._extractInitialValues(this._childrenBlueprints));
+
+        var stateUpdates = {
+            values: newValues
+        };
+
+        this.setState(stateUpdates);
     }
 
     /**
@@ -34,11 +49,21 @@ class FormComponent extends React.Component {
 
     /**
      * @param {String} identifier
-     * @param {Object} newValue
+     * @param {String} newValue
      *
      * @private
      */
     _onFieldChange(identifier, newValue) {
+        this._setValue(identifier, newValue);
+    }
+
+    /**
+     * @param {String} identifier
+     * @param {String} newValue
+     *
+     * @private
+     */
+    _setValue(identifier, newValue) {
         var newValues = _.extend({}, this.state.values);
         newValues[identifier] = newValue;
 
@@ -96,6 +121,35 @@ class FormComponent extends React.Component {
     }
 
     /**
+     * @param {Array} children
+     *
+     * @return {Object}
+     *
+     * @private
+     */
+    _extractInitialValues(children) {
+        if (!_.isArray(children)) {
+            return {};
+        }
+
+        var out = {};
+
+        children.forEach(child => {
+            if (typeof child.type !== 'undefinded' && _.isFunction(child.type)) {
+                if (FormComponent._checkIsFormElement(child.type)) {
+                    out[child.props.identifier] = child.props.value;
+                }
+            }
+
+            if (FormComponent._checkComponentHasChildren(child)) {
+                out = _.extend(out, this._extractInitialValues(child.props.children));
+            }
+        });
+
+        return out;
+    }
+
+    /**
      * @param {React.Component|Array} children
      *
      * @returns {Array}
@@ -130,13 +184,15 @@ class FormComponent extends React.Component {
      * @returns {XML}
      */
     render() {
+        this._childrenBlueprints = this._augmentChildren(this.props.children);
+
         return (
             <form action="#"
                   method="POST"
                   className="form"
                   onSubmit={this._onSubmit.bind(this)}>
 
-                {this._augmentChildren(this.props.children)}
+                {this._childrenBlueprints}
             </form>
         );
     }
