@@ -49,20 +49,22 @@ class FormInputComponent extends FormElementComponent {
                    id={generateFormElementId(this.props.identifier)}
                    value={this.state.value}
                    onChange={this._onChange.bind(this)}
-                   className="form-control" />
+                   className={this.props.className} />
         );
     }
 }
 
 FormInputComponent.defaultProps = {
     type: 'text',
-    onValueChange: null
+    onValueChange: null,
+    className: 'form-control'
 };
 
 FormInputComponent.propTypes = {
     onValueChange: React.PropTypes.func,
     identifier: React.PropTypes.string.isRequired,
-    type: React.PropTypes.string.isRequired
+    type: React.PropTypes.string.isRequired,
+    className: React.PropTypes.string
 };
 
 export default FormInputComponent;
