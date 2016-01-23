@@ -15,7 +15,7 @@ class FormInputComponent extends FormElementComponent {
         super(props);
 
         this.state = {
-            value: null
+            value: this.props.value
         };
     }
 
@@ -57,14 +57,16 @@ class FormInputComponent extends FormElementComponent {
 FormInputComponent.defaultProps = {
     type: 'text',
     onValueChange: null,
-    className: 'form-control'
+    className: 'form-control',
+    value: null
 };
 
 FormInputComponent.propTypes = {
     onValueChange: React.PropTypes.func,
     identifier: React.PropTypes.string.isRequired,
     type: React.PropTypes.string.isRequired,
-    className: React.PropTypes.string
+    className: React.PropTypes.string,
+    value: React.PropTypes.string
 };
 
 export default FormInputComponent;

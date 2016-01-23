@@ -61,6 +61,13 @@ class AppComponent extends React.Component {
                             </div>
                         </div>
 
+                        <div className="col-sm-12">
+                            <div className="form-group">
+                                <FormLabelComponent identifier="website">Website</FormLabelComponent>
+                                <FormInputComponent identifier="website" value="http://" />
+                            </div>
+                        </div>
+
                         <div className="col-sm-12 text-right">
                             <button type="submit" className="btn btn-success">Submit</button>
                         </div>
