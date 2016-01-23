@@ -11,15 +11,21 @@ class FormLabelComponent extends React.Component {
      */
     render() {
         return (
-            <label htmlFor={generateFormElementId(this.props.identifier)}>
+            <label htmlFor={generateFormElementId(this.props.identifier)}
+                   className={this.props.className}>
                 {this.props.children}
             </label>
         );
     }
 }
 
+FormLabelComponent.defaultProps = {
+    className: 'control-label'
+};
+
 FormLabelComponent.propTypes = {
-    identifier: React.PropTypes.string.isRequired
+    identifier: React.PropTypes.string.isRequired,
+    className: React.PropTypes.string
 };
 
 export default FormLabelComponent;
