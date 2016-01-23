@@ -5,6 +5,7 @@ import * as stateNamespace from './../../stateNamespace';
 import FormComponent from './../../lib/form/component/formComponent';
 import FormInputComponent from './../../lib/form/component/formInputComponent';
 import FormLabelComponent from './../../lib/form/component/formLabelComponent';
+import FormGroupComponent from './../../lib/form/component/formGroupComponent';
 
 
 /**
@@ -41,31 +42,41 @@ class AppComponent extends React.Component {
                 <div className="col-xs-12">
                     <FormComponent onSubmit={this._onFormSubmit.bind(this)}>
                         <div className="col-sm-6">
-                            <div className="form-group">
+                            <FormGroupComponent>
                                 <FormLabelComponent identifier="first-name">First name</FormLabelComponent>
                                 <FormInputComponent identifier="first-name" />
-                            </div>
+                            </FormGroupComponent>
                         </div>
 
                         <div className="col-sm-6">
-                            <div className="form-group">
+                            <FormGroupComponent>
                                 <FormLabelComponent identifier="last-name">Last name</FormLabelComponent>
                                 <FormInputComponent identifier="last-name" />
-                            </div>
+                            </FormGroupComponent>
                         </div>
 
                         <div className="col-sm-12">
-                            <div className="form-group">
+                            <FormGroupComponent>
                                 <FormLabelComponent identifier="street">Street</FormLabelComponent>
                                 <FormInputComponent identifier="street" />
-                            </div>
+                                <span className="glyphicon glyphicon-ok form-control-feedback" />
+                            </FormGroupComponent>
                         </div>
 
                         <div className="col-sm-12">
-                            <div className="form-group">
+                            <FormGroupComponent>
                                 <FormLabelComponent identifier="website">Website</FormLabelComponent>
                                 <FormInputComponent identifier="website" value="http://" />
-                            </div>
+                                <span className="glyphicon glyphicon-remove form-control-feedback" />
+
+                                <span className="help-block">
+                                    <ul className="list">
+                                        <li>
+                                            Vul de naam van uw organisatie in
+                                        </li>
+                                    </ul>
+                                </span>
+                            </FormGroupComponent>
                         </div>
 
                         <div className="col-sm-12 text-right">

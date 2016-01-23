@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import FormElementComponent from './formElementComponent';
 import FormInputComponent from './formInputComponent';
+import { checkIsFormElement, cloneChildFormElements, checkComponentHasChildren, extractValuesFromChildFormElements } from './../helper/componentChildHelper';
 
 /**
  * @author Gijs Nieuwenhuis <gijs.nieuwenhuis@freshheads.com>
@@ -18,14 +19,18 @@ class FormComponent extends React.Component {
             values: {}
         };
 
-        this._childrenBlueprints = null;
+        this._children = null;
     }
 
     /**
      * @inheritDoc
      */
     componentDidMount() {
-        var newValues = _.extend({}, this.state.values, this._extractInitialValues(this._childrenBlueprints));
+        var newValues = _.extend(
+            {},
+            this.state.values,
+            extractValuesFromChildFormElements(this._children)
+        );
 
         var stateUpdates = {
             values: newValues
@@ -53,7 +58,7 @@ class FormComponent extends React.Component {
      *
      * @private
      */
-    _onFieldChange(identifier, newValue) {
+    _onFieldValueChange(identifier, newValue) {
         this._setValue(identifier, newValue);
     }
 
@@ -77,76 +82,27 @@ class FormComponent extends React.Component {
     }
 
     /**
-     * @param {React.Component} component
+     * @param {React.Component} child
      *
-     * @returns {boolean}
-     *
-     * @private
-     */
-    static _checkIsFormElement(component) {
-        //@todo better solution?
-
-        if (component === FormElementComponent) {
-            return true;
-        } else if (component.prototype instanceof FormElementComponent) {
-            return true;
-        } else if (component.prototype.prototype instanceof FormElementComponent) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param {*} component
-     *
-     * @return {Boolean}
+     * @returns {React.Component}
      *
      * @private
      */
-    static _checkComponentHasChildren(component) {
-        if (typeof component.props === 'undefined') {
-            return false;
+    _cloneChildAndAppendListeners(child) {
+        var currentProps = typeof child.props !== 'undefined' ? child.props : {},
+            newOnValueChange = this._onFieldValueChange.bind(this);
+
+        // if an onValueChange listener is already applied, wrap it to append our own listener
+        if (typeof currentProps.onValueChange !== 'undefined' && _.isFunction(currentProps.onValueChange)) {
+            newOnValueChange = function (identifier, newValue) {
+                currentProps.onValueChange(identifier, newValue);
+                newOnValueChange(identifier, newValue);
+            };
         }
 
-        if (typeof component.props.children === 'undefined') {
-            return false;
-        }
-
-        if (React.Children.count(component.props.children) === 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param {Array} children
-     *
-     * @return {Object}
-     *
-     * @private
-     */
-    _extractInitialValues(children) {
-        if (!_.isArray(children)) {
-            return {};
-        }
-
-        var out = {};
-
-        children.forEach(child => {
-            if (typeof child.type !== 'undefinded' && _.isFunction(child.type)) {
-                if (FormComponent._checkIsFormElement(child.type)) {
-                    out[child.props.identifier] = child.props.value;
-                }
-            }
-
-            if (FormComponent._checkComponentHasChildren(child)) {
-                out = _.extend(out, this._extractInitialValues(child.props.children));
-            }
+        return React.cloneElement(child, {
+            onValueChange: this._onFieldValueChange.bind(this)
         });
-
-        return out;
     }
 
     /**
@@ -159,32 +115,17 @@ class FormComponent extends React.Component {
      * @see https://facebook.github.io/react/blog/2015/03/03/react-v0.13-rc2.html#react.cloneelement
      */
     _augmentChildren(children) {
-        var callback = this._onFieldChange.bind(this);
-
-        return React.Children.map(children, child => {
-            if (typeof child.type !== 'undefinded' && _.isFunction(child.type)) {
-                if (FormComponent._checkIsFormElement(child.type)) {
-                    child = React.cloneElement(child, {
-                        onValueChange: callback
-                    });
-                }
-            }
-
-            if (FormComponent._checkComponentHasChildren(child)) {
-                child = React.cloneElement(child, {
-                    children: this._augmentChildren(child.props.children)
-                });
-            }
-
-            return child;
-        });
+        return cloneChildFormElements(
+            children,
+            child => this._cloneChildAndAppendListeners(child)
+        );
     }
 
     /**
      * @returns {XML}
      */
     render() {
-        this._childrenBlueprints = this._augmentChildren(this.props.children);
+        this._children = this._augmentChildren(this.props.children);
 
         return (
             <form action="#"
@@ -192,7 +133,7 @@ class FormComponent extends React.Component {
                   className="form"
                   onSubmit={this._onSubmit.bind(this)}>
 
-                {this._childrenBlueprints}
+                {this._children}
             </form>
         );
     }

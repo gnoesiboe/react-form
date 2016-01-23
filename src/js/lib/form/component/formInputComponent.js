@@ -3,6 +3,10 @@ import _ from 'lodash';
 import FormElementComponent from './formElementComponent';
 import { generateFormElementId } from './../helper/identifierHelper';
 
+const STATUS_UNTOUCHED = 'untouched';
+const STATUS_FOCUSSED = 'focussed';
+const STATUS_BLURRED = 'blurred';
+
 /**
  * @author Gijs Nieuwenhuis <gijs.nieuwenhuis@freshheads.com>
  */
@@ -14,8 +18,18 @@ class FormInputComponent extends FormElementComponent {
     constructor(props) {
         super(props);
 
-        this.state = {
-            value: this.props.value
+        this.state = this._defineInitialState();
+    }
+
+    /**
+     * @returns {Object}
+     *
+     * @private
+     */
+    _defineInitialState() {
+        return {
+            value: this.props.value,
+            status: STATUS_UNTOUCHED
         };
     }
 
@@ -40,6 +54,24 @@ class FormInputComponent extends FormElementComponent {
     }
 
     /**
+     * @private
+     */
+    _onFocus() {
+        this.setState({
+            status: STATUS_FOCUSSED
+        });
+    }
+
+    /**
+     * @private
+     */
+    _onBlur() {
+        this.setState({
+            status: STATUS_BLURRED
+        });
+    }
+
+    /**
      * @returns {XML}
      */
     render() {
@@ -48,6 +80,8 @@ class FormInputComponent extends FormElementComponent {
                    name={this.props.identifier}
                    id={generateFormElementId(this.props.identifier)}
                    value={this.state.value}
+                   onFocus={this._onFocus.bind(this)}
+                   onBlur={this._onBlur.bind(this)}
                    onChange={this._onChange.bind(this)}
                    className={this.props.className} />
         );
