@@ -21,7 +21,7 @@ export function checkIsFormElement(component) {
     }
 
     return false;
-};
+}
 
 /**
  * @param {React.Component} component

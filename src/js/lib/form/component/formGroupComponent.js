@@ -6,12 +6,12 @@ import * as componentChildHelper from './../helper/componentChildHelper';
  */
 class FormGroupComponent extends React.Component {
 
-    /*_augmentChildren(children) {
+    _augmentChildrenFormElements(children) {
         return componentChildHelper.cloneChildFormElements(
             children,
-            child => this._cloneChildAndAppendListeners
+            child => this._cloneChildAndAppendListeners(child)
         );
-    }*/
+    }
 
     /**
      * @param {String} identifier
@@ -19,9 +19,9 @@ class FormGroupComponent extends React.Component {
      *
      * @private
      */
-    /*_onFieldValueChange(identifier, newValue) {
+    _onFieldValueChange(identifier, newValue) {
         console.log('on field value change in form group: ', identifier, newValue);
-    }*/
+    }
 
     /**
      * @param {React.Component} child
@@ -30,35 +30,43 @@ class FormGroupComponent extends React.Component {
      *
      * @private
      */
-    /*_cloneChildAndAppendListeners(child) {
+    _cloneChildAndAppendListeners(child) {
         var currentProps = typeof child.props !== 'undefined' ? child.props : {},
             newOnValueChange = this._onFieldValueChange.bind(this);
 
         // if an onValueChange listener is already applied, wrap it to append our own listener
         if (typeof currentProps.onValueChange !== 'undefined' && _.isFunction(currentProps.onValueChange)) {
-            newOnValueChange = function (identifier, newValue) {
+            newOnValueChange = (identifier, newValue) => {
                 currentProps.onValueChange(identifier, newValue);
-                newOnValueChange(identifier, newValue);
+                this._onFieldValueChange(identifier, newValue);
             };
         }
 
         return React.cloneElement(child, {
-            onValueChange: this._onFieldValueChange.bind(this)
+            onValueChange: newOnValueChange
         });
-    }*/
+    }
 
     /**
      * @returns {XML}
      */
     render() {
+        var children = this._augmentChildrenFormElements(this.props.children);
+
         return (
             <div className="form-group has-success has-feedback">
-                {this.props.children}
+                {children}
             </div>
         );
     }
 }
 
-FormGroupComponent.propTypes = {};
+FormGroupComponent.defaultProps = {
+    onValueChange: null
+};
+
+FormGroupComponent.propTypes = {
+    onValueChange: React.PropTypes.func
+};
 
 export default FormGroupComponent;

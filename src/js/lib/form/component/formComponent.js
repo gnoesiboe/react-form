@@ -94,14 +94,14 @@ class FormComponent extends React.Component {
 
         // if an onValueChange listener is already applied, wrap it to append our own listener
         if (typeof currentProps.onValueChange !== 'undefined' && _.isFunction(currentProps.onValueChange)) {
-            newOnValueChange = function (identifier, newValue) {
+            newOnValueChange = (identifier, newValue) => {
                 currentProps.onValueChange(identifier, newValue);
-                newOnValueChange(identifier, newValue);
+                this._onFieldValueChange(identifier, newValue);
             };
         }
 
         return React.cloneElement(child, {
-            onValueChange: this._onFieldValueChange.bind(this)
+            onValueChange: newOnValueChange
         });
     }
 
@@ -114,7 +114,7 @@ class FormComponent extends React.Component {
      *
      * @see https://facebook.github.io/react/blog/2015/03/03/react-v0.13-rc2.html#react.cloneelement
      */
-    _augmentChildren(children) {
+    _augmentChildFormGroups(children) {
         return cloneChildFormElements(
             children,
             child => this._cloneChildAndAppendListeners(child)
@@ -125,7 +125,7 @@ class FormComponent extends React.Component {
      * @returns {XML}
      */
     render() {
-        this._children = this._augmentChildren(this.props.children);
+        this._children = this._augmentChildFormGroups(this.props.children);
 
         return (
             <form action="#"
