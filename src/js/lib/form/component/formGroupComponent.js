@@ -17,7 +17,8 @@ class FormGroupComponent extends React.Component {
         super(props);
 
         this.state = {
-            status: STATUS_PENDING
+            status: STATUS_PENDING,
+            validationErrors: []
         };
     }
 
@@ -46,6 +47,40 @@ class FormGroupComponent extends React.Component {
     }
 
     /**
+     * @param {String} error
+     *
+     * @private
+     */
+    _onFieldValidationError(error) {
+        this._appendValidationError(error);
+    }
+
+    /**
+     * @param {String} error
+     *
+     * @private
+     */
+    _appendValidationError(error) {
+        var validationErrors = this.state.validationErrors;
+
+        validationErrors.push(error);
+
+        this.setState({
+            validationErrors: validationErrors,
+            status: STATUS_ERROR
+        });
+    }
+
+    /**
+     * @returns {boolean}
+     *
+     * @private
+     */
+    _hasValidationErrors() {
+        return this.state.validationErrors.length > 0;
+    }
+
+    /**
      * @param {React.Component} child
      *
      * @returns {React.Component}
@@ -54,7 +89,8 @@ class FormGroupComponent extends React.Component {
      */
     _cloneChildAndAppendListeners(child) {
         var currentProps = typeof child.props !== 'undefined' ? child.props : {},
-            newOnValueChange = this._onFieldValueChange.bind(this);
+            newOnValueChange = this._onFieldValueChange.bind(this),
+            newOnValidationError = this._onFieldValidationError.bind(this);
 
         // if an onValueChange listener is already applied, wrap it to append our own listener
         if (typeof currentProps.onValueChange !== 'undefined' && _.isFunction(currentProps.onValueChange)) {
@@ -64,8 +100,16 @@ class FormGroupComponent extends React.Component {
             };
         }
 
+        if (typeof currentProps.onValidationError !== 'undefined' && _.isFunction(currentProps.onValidationError)) {
+            newOnValidationError = (error) => {
+                currentProps.onValidationError(error);
+                this._onFieldValidationError(error);
+            };
+        }
+
         return React.cloneElement(child, {
-            onValueChange: newOnValueChange
+            onValueChange: newOnValueChange,
+            onValidationError: newOnValidationError
         });
     }
 
@@ -96,6 +140,61 @@ class FormGroupComponent extends React.Component {
     }
 
     /**
+     * @returns {XML|null}
+     *
+     * @private
+     */
+    _renderErrorList() {
+        if (this.state.status !== STATUS_ERROR || this.state.validationErrors.length === 0) {
+            return null;
+        }
+
+        return (
+            <span className="help-block">
+                <ul className="list">
+                    { this.state.validationErrors.map((error, index) => {
+                        return (
+                            <li key={index}>{error}</li>
+                        );
+                    }) }
+                </ul>
+            </span>
+        );
+    }
+
+    /**
+     * @returns {XML|null}
+     *
+     * @private
+     */
+    _renderGlyphicon() {
+        if (this.state.status === STATUS_PENDING) {
+            return null;
+        }
+
+        var glyphicon = null;
+
+        switch (this.state.status) {
+            case STATUS_ERROR:
+                glyphicon = 'glyphicon-remove';
+                break;
+
+            case STATUS_SUCCESS:
+                glyphicon = 'glyphicon-ok';
+                break;
+
+            default:
+                throw new Error(`Status ${this.state.status} not supported`);
+        }
+
+        var className = `glyphicon ${glyphicon} form-control-feedback`;
+
+        return (
+            <span className={className} />
+        );
+    }
+
+    /**
      * @returns {XML}
      */
     render() {
@@ -104,6 +203,9 @@ class FormGroupComponent extends React.Component {
         return (
             <div className={this._defineClassName()}>
                 {children}
+
+                {this._renderGlyphicon()}
+                {this._renderErrorList()}
             </div>
         );
     }

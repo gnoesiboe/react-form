@@ -6,7 +6,8 @@ import FormComponent from './../../lib/form/component/formComponent';
 import FormInputComponent from './../../lib/form/component/formInputComponent';
 import FormLabelComponent from './../../lib/form/component/formLabelComponent';
 import FormGroupComponent from './../../lib/form/component/formGroupComponent';
-
+import ValidatorCollection from './../../lib/validator/collection/validatorCollection';
+import NotBlankValidator from './../../lib/validator/validator/notBlank';
 
 /**
  * @author Gijs Nieuwenhuis <gijs.nieuwenhuis@freshheads.com>
@@ -37,6 +38,10 @@ class AppComponent extends React.Component {
      * @returns {XML}
      */
     render() {
+        var firstNameValidators = new ValidatorCollection([
+            new NotBlankValidator()
+        ]);
+
         return (
             <div className="row">
                 <div className="col-xs-12">
@@ -44,7 +49,8 @@ class AppComponent extends React.Component {
                         <div className="col-sm-6">
                             <FormGroupComponent>
                                 <FormLabelComponent identifier="first-name">First name</FormLabelComponent>
-                                <FormInputComponent identifier="first-name" />
+                                <FormInputComponent identifier="first-name"
+                                                    validators={firstNameValidators} />
                             </FormGroupComponent>
                         </div>
 
@@ -59,7 +65,6 @@ class AppComponent extends React.Component {
                             <FormGroupComponent>
                                 <FormLabelComponent identifier="street">Street</FormLabelComponent>
                                 <FormInputComponent identifier="street" />
-                                <span className="glyphicon glyphicon-ok form-control-feedback" />
                             </FormGroupComponent>
                         </div>
 
@@ -67,15 +72,6 @@ class AppComponent extends React.Component {
                             <FormGroupComponent>
                                 <FormLabelComponent identifier="website">Website</FormLabelComponent>
                                 <FormInputComponent identifier="website" value="http://" />
-                                <span className="glyphicon glyphicon-remove form-control-feedback" />
-
-                                <span className="help-block">
-                                    <ul className="list">
-                                        <li>
-                                            Vul de naam van uw organisatie in
-                                        </li>
-                                    </ul>
-                                </span>
                             </FormGroupComponent>
                         </div>
 
