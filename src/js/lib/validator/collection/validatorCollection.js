@@ -41,7 +41,9 @@ class ValidatorCollection {
      * @returns {Array}
      */
     validate(value) {
-        return this._validators.map(validator => {
+        var errors = [];
+
+        this._validators.forEach(validator => {
             try {
                 validator.validate(value);
             } catch (error) {
@@ -49,9 +51,11 @@ class ValidatorCollection {
                     throw error;
                 }
 
-                return error.message;
+                errors.push(error.message);
             }
         });
+
+        return errors;
     }
 }
 
