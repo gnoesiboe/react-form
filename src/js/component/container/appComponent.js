@@ -8,6 +8,7 @@ import FormLabelComponent from './../../lib/form/component/formLabelComponent';
 import FormGroupComponent from './../../lib/form/component/formGroupComponent';
 import ValidatorCollection from './../../lib/validator/collection/validatorCollection';
 import NotBlankValidator from './../../lib/validator/validator/notBlank';
+import LengthValidator from './../../lib/validator/validator/length';
 
 /**
  * @author Gijs Nieuwenhuis <gijs.nieuwenhuis@freshheads.com>
@@ -48,7 +49,7 @@ class AppComponent extends React.Component {
                             <FormGroupComponent>
                                 <FormLabelComponent identifier="first-name">First name</FormLabelComponent>
                                 <FormInputComponent identifier="first-name"
-                                                    validators={ new ValidatorCollection([new NotBlankValidator()]) } />
+                                                    validators={ new ValidatorCollection([new NotBlankValidator(), new LengthValidator(3, 5)]) } />
                             </FormGroupComponent>
                         </div>
 
