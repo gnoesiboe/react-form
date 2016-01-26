@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import Validator from './../validator';
-import ValidationError from './../error/validationError';
 
 var _defaultInvalidMessage = 'Cannot be blank';;
 
@@ -29,7 +28,9 @@ class NotBlankValidator extends Validator {
         }
 
         if (value.length === 0) {
-            throw new ValidationError(this._invalidMessage);
+            throw Validator._createValidationError(this._invalidMessage, {
+                '{value}': value
+            });
         }
     }
 }
