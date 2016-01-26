@@ -59,6 +59,16 @@ class FormGroupComponent extends React.Component {
     }
 
     /**
+     * @private
+     */
+    _onFieldValid() {
+        this.setState({
+            validationErrors: [],
+            status: STATUS_SUCCESS
+        });
+    }
+
+    /**
      * @param {Array} errors
      *
      * @private
@@ -86,7 +96,8 @@ class FormGroupComponent extends React.Component {
     _cloneChildAndAppendListeners(child) {
         var currentProps = typeof child.props !== 'undefined' ? child.props : {},
             newOnValueChange = this._onFieldValueChange.bind(this),
-            newOnInvalid = this._onFieldInvalid.bind(this);
+            newOnInvalid = this._onFieldInvalid.bind(this),
+            newOnValid = this._onFieldValid.bind(this);
 
         // if an onValueChange listener is already applied, wrap it to append our own listener
         if (typeof currentProps.onValueChange !== 'undefined' && _.isFunction(currentProps.onValueChange)) {
@@ -103,9 +114,17 @@ class FormGroupComponent extends React.Component {
             };
         }
 
+        if (typeof currentProps.onValid !== 'undefined' && _.isFunction(currentProps.onValid)) {
+            newOnValid = () => {
+                currentProps.onValid();
+                this._onFieldValid();
+            };
+        }
+
         return React.cloneElement(child, {
             onValueChange: newOnValueChange,
-            onInvalid: newOnInvalid
+            onInvalid: newOnInvalid,
+            onValid: newOnValid
         });
     }
 
