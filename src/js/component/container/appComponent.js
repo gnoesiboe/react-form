@@ -35,13 +35,11 @@ class AppComponent extends React.Component {
     }
 
     /**
+     * @inheritDoc
+     *
      * @returns {XML}
      */
     render() {
-        var firstNameValidators = new ValidatorCollection([
-            new NotBlankValidator()
-        ]);
-
         return (
             <div className="row">
                 <div className="col-xs-12">
@@ -50,28 +48,32 @@ class AppComponent extends React.Component {
                             <FormGroupComponent>
                                 <FormLabelComponent identifier="first-name">First name</FormLabelComponent>
                                 <FormInputComponent identifier="first-name"
-                                                    validators={firstNameValidators} />
+                                                    validators={ new ValidatorCollection([new NotBlankValidator()]) } />
                             </FormGroupComponent>
                         </div>
 
                         <div className="col-sm-6">
                             <FormGroupComponent>
                                 <FormLabelComponent identifier="last-name">Last name</FormLabelComponent>
-                                <FormInputComponent identifier="last-name" />
+                                <FormInputComponent identifier="last-name"
+                                                    validators={ new ValidatorCollection([new NotBlankValidator()]) } />
                             </FormGroupComponent>
                         </div>
 
                         <div className="col-sm-12">
                             <FormGroupComponent>
                                 <FormLabelComponent identifier="street">Street</FormLabelComponent>
-                                <FormInputComponent identifier="street" />
+                                <FormInputComponent identifier="street"
+                                                    validators={ new ValidatorCollection([new NotBlankValidator()]) } />
                             </FormGroupComponent>
                         </div>
 
                         <div className="col-sm-12">
                             <FormGroupComponent>
                                 <FormLabelComponent identifier="website">Website</FormLabelComponent>
-                                <FormInputComponent identifier="website" value="http://" />
+                                <FormInputComponent identifier="website"
+                                                    value="http://"
+                                                    validators={ new ValidatorCollection([new NotBlankValidator()]) } />
                             </FormGroupComponent>
                         </div>
 
