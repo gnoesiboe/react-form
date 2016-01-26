@@ -81,7 +81,7 @@ class FormInputComponent extends FormElementComponent {
             var errors = this.props.validators.validate(this.state.value);
 
             if (errors.length > 0) {
-                this._emitErrors(errors);
+                this._emitInvalid(errors);
             } else {
                 this._emitValid();
             }
@@ -93,24 +93,11 @@ class FormInputComponent extends FormElementComponent {
      *
      * @private
      */
-    _emitErrors(errors) {
-        errors.forEach(error => {
-            this._emitError(error);
-        });
-    }
-
-    /**
-     * @param {String} error
-     *
-     * @private
-     */
-    _emitError(error) {
-        if (_.isFunction(this.props.onValidationError)) {
-            this.props.onValidationError(error);
-        } else {
-            console.warn('no onValidationError callback');
+    _emitInvalid(errors) {
+        if (_.isFunction(this.props.onInvalid)) {
+            this.props.onInvalid(errors);
         }
-     }
+    }
 
     /**
      * @private
@@ -141,7 +128,7 @@ class FormInputComponent extends FormElementComponent {
 FormInputComponent.defaultProps = {
     type: 'text',
     onValueChange: null,
-    onValidationError: null,
+    onInvalid: null,
     onValid: null,
     className: 'form-control',
     value: '',
@@ -150,7 +137,7 @@ FormInputComponent.defaultProps = {
 
 FormInputComponent.propTypes = {
     onValueChange: React.PropTypes.func,
-    onValidationError: React.PropTypes.func,
+    onInvalid: React.PropTypes.func,
     onValid: React.PropTypes.func,
     identifier: React.PropTypes.string.isRequired,
     type: React.PropTypes.string.isRequired,

@@ -47,28 +47,24 @@ class FormGroupComponent extends React.Component {
     }
 
     /**
-     * @param {String} error
+     * @param {Array} errors
      *
      * @private
      */
-    _onFieldValidationError(error) {
-        this._appendValidationError(error);
+    _onFieldInvalid(errors) {
+        this.setState({
+            validationErrors: errors,
+            status: STATUS_ERROR
+        });
     }
 
     /**
-     * @param {String} error
+     * @param {Array} errors
      *
      * @private
      */
-    _appendValidationError(error) {
-        var validationErrors = this.state.validationErrors;
+    _appendValidationError(errors) {
 
-        validationErrors.push(error);
-
-        this.setState({
-            validationErrors: validationErrors,
-            status: STATUS_ERROR
-        });
     }
 
     /**
@@ -90,7 +86,7 @@ class FormGroupComponent extends React.Component {
     _cloneChildAndAppendListeners(child) {
         var currentProps = typeof child.props !== 'undefined' ? child.props : {},
             newOnValueChange = this._onFieldValueChange.bind(this),
-            newOnValidationError = this._onFieldValidationError.bind(this);
+            newOnInvalid = this._onFieldInvalid.bind(this);
 
         // if an onValueChange listener is already applied, wrap it to append our own listener
         if (typeof currentProps.onValueChange !== 'undefined' && _.isFunction(currentProps.onValueChange)) {
@@ -100,16 +96,16 @@ class FormGroupComponent extends React.Component {
             };
         }
 
-        if (typeof currentProps.onValidationError !== 'undefined' && _.isFunction(currentProps.onValidationError)) {
-            newOnValidationError = (error) => {
-                currentProps.onValidationError(error);
-                this._onFieldValidationError(error);
+        if (typeof currentProps.onInvalid !== 'undefined' && _.isFunction(currentProps.onInvalid)) {
+            newOnInvalid = (error) => {
+                currentProps.onInvalid(error);
+                this._onFieldInvalid(error);
             };
         }
 
         return React.cloneElement(child, {
             onValueChange: newOnValueChange,
-            onValidationError: newOnValidationError
+            onInvalid: newOnInvalid
         });
     }
 
