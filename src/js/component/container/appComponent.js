@@ -7,6 +7,7 @@ import FormInputComponent from './../../lib/form/component/formInputComponent';
 import FormLabelComponent from './../../lib/form/component/formLabelComponent';
 import FormGroupComponent from './../../lib/form/component/formGroupComponent';
 import FormTextareaComponent from './../../lib/form/component/formTextareaComponent';
+import FormSelectComponent from './../../lib/form/component/formSelectComponent';
 import ValidatorCollection from './../../lib/validator/collection/validatorCollection';
 import NotBlankValidator from './../../lib/validator/validator/notBlank';
 import LengthValidator from './../../lib/validator/validator/length';
@@ -42,6 +43,17 @@ class AppComponent extends React.Component {
      * @returns {XML}
      */
     render() {
+        var disciplineOptions = {
+            '': '-- choose a discipline --',
+            eerste: 'Eerste',
+            tweede: 'Tweede',
+            derde: {
+                vierde: 'Vierde',
+                vijfde: 'Vijfde'
+            },
+            zesde: 'Zesde'
+        };
+
         return (
             <div className="row">
                 <div className="col-xs-12">
@@ -67,6 +79,15 @@ class AppComponent extends React.Component {
                                 <FormLabelComponent identifier="description">Description</FormLabelComponent>
                                 <FormTextareaComponent identifier="description"
                                                        validators={ new ValidatorCollection([new NotBlankValidator()]) } />
+                            </FormGroupComponent>
+                        </div>
+
+                        <div className="col-sm-12">
+                            <FormGroupComponent>
+                                <FormLabelComponent identifier="discipline">Discipline</FormLabelComponent>
+                                <FormSelectComponent identifier="descipline"
+                                                     options={disciplineOptions}
+                                                     validators={ new ValidatorCollection([new NotBlankValidator()]) } />
                             </FormGroupComponent>
                         </div>
 

@@ -23,15 +23,30 @@ class NotBlankValidator extends Validator {
      * @returns {boolean}
      */
     validate(value) {
+        if (value === null) {
+            throw this._createInvalidError(value);
+        }
+
         if (!_.isString(value)) {
             throw new Error('The NotBlank validator can only be used on strings');
         }
 
         if (value.length === 0) {
-            throw Validator._createValidationError(this._invalidMessage, {
-                '{value}': value
-            });
+            throw this._createInvalidError(value);
         }
+    }
+
+    /**
+     * @param value
+     *
+     * @return {ValidationError}
+     *
+     * @private
+     */
+    _createInvalidError(value) {
+        return Validator._createValidationError(this._invalidMessage, {
+            '{value}': value
+        })
     }
 }
 

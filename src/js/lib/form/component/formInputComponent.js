@@ -2,7 +2,6 @@ import React from 'react';
 import _ from 'lodash';
 import FormElementComponent from './formElementComponent';
 import { generateFormElementId } from './../helper/identifierHelper';
-import * as formElementStatus from './../constant/formElementStatus';
 
 /**
  * @author Gijs Nieuwenhuis <gijs.nieuwenhuis@freshheads.com>
@@ -10,6 +9,8 @@ import * as formElementStatus from './../constant/formElementStatus';
 class FormInputComponent extends FormElementComponent {
 
     /**
+     * @inheritDoc
+     *
      * @returns {XML}
      */
     render() {

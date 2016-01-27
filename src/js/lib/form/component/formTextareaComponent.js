@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import FormElementComponent from './formElementComponent';
 import { generateFormElementId } from './../helper/identifierHelper';
 
