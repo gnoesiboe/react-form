@@ -2,111 +2,12 @@ import React from 'react';
 import _ from 'lodash';
 import FormElementComponent from './formElementComponent';
 import { generateFormElementId } from './../helper/identifierHelper';
-
-const STATUS_UNTOUCHED = 'untouched';
-const STATUS_FOCUSSED = 'focussed';
-const STATUS_BLURRED = 'blurred';
+import * as formElementStatus from './../constant/formElementStatus';
 
 /**
  * @author Gijs Nieuwenhuis <gijs.nieuwenhuis@freshheads.com>
  */
 class FormInputComponent extends FormElementComponent {
-
-    /**
-     * @param {Object} props
-     */
-    constructor(props) {
-        super(props);
-
-        this.state = this._defineInitialState();
-    }
-
-    /**
-     * @returns {Object}
-     *
-     * @private
-     */
-    _defineInitialState() {
-        return {
-            value: this.props.value,
-            status: STATUS_UNTOUCHED
-        };
-    }
-
-    /**
-     * @param {Object} event
-     */
-    _onChange(event) {
-        this.setState({
-            value: event.target.value
-        }, this._onChangeAppliedToInternalState.bind(this));
-    }
-
-    /**
-     * @private
-     */
-    _onChangeAppliedToInternalState() {
-        if (this.props.onValueChange) {
-            this.props.onValueChange(this.props.identifier, this.state.value);
-        } else {
-            console.warn('no onValueChanged callback implemented');
-        }
-    }
-
-    /**
-     * @private
-     */
-    _onFocus() {
-        this.setState({
-            status: STATUS_FOCUSSED
-        });
-    }
-
-    /**
-     * @private
-     */
-    _onBlur() {
-        this.setState({
-            status: STATUS_BLURRED
-        });
-
-        this._validate();
-    }
-
-    /**
-     * @private
-     */
-    _validate() {
-        if (_.isObject(this.props.validators)) {
-            var errors = this.props.validators.validate(this.state.value);
-
-            if (errors.length > 0) {
-                this._emitInvalid(errors);
-            } else {
-                this._emitValid();
-            }
-        }
-    }
-
-    /**
-     * @param {Array} errors
-     *
-     * @private
-     */
-    _emitInvalid(errors) {
-        if (_.isFunction(this.props.onInvalid)) {
-            this.props.onInvalid(errors);
-        }
-    }
-
-    /**
-     * @private
-     */
-    _emitValid() {
-        if (_.isFunction(this.props.onValid)) {
-            this.props.onValid();
-        }
-    }
 
     /**
      * @returns {XML}
@@ -125,25 +26,13 @@ class FormInputComponent extends FormElementComponent {
     }
 }
 
-FormInputComponent.defaultProps = {
+FormInputComponent.defaultProps = _.extend({}, FormElementComponent.defaultProps, {
     type: 'text',
-    onValueChange: null,
-    onInvalid: null,
-    onValid: null,
-    className: 'form-control',
-    value: '',
-    validators: null
-};
+    value: ''
+});
 
-FormInputComponent.propTypes = {
-    onValueChange: React.PropTypes.func,
-    onInvalid: React.PropTypes.func,
-    onValid: React.PropTypes.func,
-    identifier: React.PropTypes.string.isRequired,
-    type: React.PropTypes.string.isRequired,
-    className: React.PropTypes.string,
-    value: React.PropTypes.string,
-    validators: React.PropTypes.object
-};
+FormInputComponent.propTypes = _.extend({}, FormElementComponent.propTypes, {
+    type: React.PropTypes.string.isRequired
+});
 
 export default FormInputComponent;
