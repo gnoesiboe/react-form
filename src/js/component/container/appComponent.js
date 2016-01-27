@@ -6,6 +6,7 @@ import FormComponent from './../../lib/form/component/formComponent';
 import FormInputComponent from './../../lib/form/component/formInputComponent';
 import FormLabelComponent from './../../lib/form/component/formLabelComponent';
 import FormGroupComponent from './../../lib/form/component/formGroupComponent';
+import FormTextareaComponent from './../../lib/form/component/formTextareaComponent';
 import ValidatorCollection from './../../lib/validator/collection/validatorCollection';
 import NotBlankValidator from './../../lib/validator/validator/notBlank';
 import LengthValidator from './../../lib/validator/validator/length';
@@ -63,9 +64,9 @@ class AppComponent extends React.Component {
 
                         <div className="col-sm-12">
                             <FormGroupComponent>
-                                <FormLabelComponent identifier="street">Street</FormLabelComponent>
-                                <FormInputComponent identifier="street"
-                                                    validators={ new ValidatorCollection([new NotBlankValidator()]) } />
+                                <FormLabelComponent identifier="description">Description</FormLabelComponent>
+                                <FormTextareaComponent identifier="description"
+                                                       validators={ new ValidatorCollection([new NotBlankValidator()]) } />
                             </FormGroupComponent>
                         </div>
 
