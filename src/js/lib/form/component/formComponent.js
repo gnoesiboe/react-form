@@ -30,7 +30,7 @@ class FormComponent extends React.Component {
     static _getInitialState() {
         return {
             values: {},
-            errors: {}
+            validFields: {}
         };
     }
 
@@ -39,6 +39,30 @@ class FormComponent extends React.Component {
      */
     componentDidMount() {
         this._importInitialValuesStateFromChildFormElements();
+
+        this._disableSubmits();
+    }
+
+    /**
+     * @private
+     */
+    _disableSubmits() {
+        this._childrenInstances.forEach(child => {
+            if (child instanceof FormSubmitComponent) {
+                child.disable();
+            }
+        });
+    }
+
+    /**
+     * @private
+     */
+    _enableSubmits() {
+        this._childrenInstances.forEach(child => {
+            if (child instanceof FormSubmitComponent) {
+                child.enable();
+            }
+        });
     }
 
     /**
@@ -122,6 +146,8 @@ class FormComponent extends React.Component {
      */
     _onFieldInvalid(fieldIdentifier) {
         this._setFieldErrorState(fieldIdentifier, false);
+
+        this._resetSubmitStatus();
     }
 
     /**
@@ -129,6 +155,36 @@ class FormComponent extends React.Component {
      */
     _onFieldValid(fieldIdentifier) {
         this._setFieldErrorState(fieldIdentifier, true);
+
+        this._resetSubmitStatus();
+    }
+
+    /**
+     * @private
+     */
+    _resetSubmitStatus() {
+        if (this._hasValidationErrors()) {
+            this._disableSubmits();
+        } else {
+            this._enableSubmits();
+        }
+    }
+
+    /**
+     * @returns {boolean}
+     *
+     * @private
+     */
+    _hasValidationErrors() {
+        for (var key in this.state.validFields) {
+            if (this.state.validFields.hasOwnProperty(key)) {
+                if (this.state.validFields[key] === false) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -138,7 +194,7 @@ class FormComponent extends React.Component {
      * @private
      */
     _setFieldErrorState(fieldIdentifier, isValid) {
-        var errors = this.state.errors;
+        var errors = this.state.validFields;
         errors[fieldIdentifier] = isValid;
 
         this.setState({
