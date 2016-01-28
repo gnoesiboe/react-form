@@ -69,24 +69,6 @@ class FormGroupComponent extends React.Component {
     }
 
     /**
-     * @param {Array} errors
-     *
-     * @private
-     */
-    _appendValidationError(errors) {
-
-    }
-
-    /**
-     * @returns {boolean}
-     *
-     * @private
-     */
-    _hasValidationErrors() {
-        return this.state.validationErrors.length > 0;
-    }
-
-    /**
      * @param {React.Component} child
      *
      * @returns {React.Component}
@@ -99,7 +81,6 @@ class FormGroupComponent extends React.Component {
             newOnInvalid = this._onFieldInvalid.bind(this),
             newOnValid = this._onFieldValid.bind(this);
 
-        // if an onValueChange listener is already applied, wrap it to append our own listener
         if (typeof currentProps.onValueChange !== 'undefined' && _.isFunction(currentProps.onValueChange)) {
             newOnValueChange = (identifier, newValue) => {
                 currentProps.onValueChange(identifier, newValue);
