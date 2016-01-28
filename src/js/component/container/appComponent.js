@@ -8,6 +8,7 @@ import FormLabelComponent from './../../lib/form/component/formLabelComponent';
 import FormGroupComponent from './../../lib/form/component/formGroupComponent';
 import FormTextareaComponent from './../../lib/form/component/formTextareaComponent';
 import FormSelectComponent from './../../lib/form/component/formSelectComponent';
+import FormSubmitComponent from './../../lib/form/component/formSubmitComponent';
 import ValidatorCollection from './../../lib/validator/collection/validatorCollection';
 import NotBlankValidator from './../../lib/validator/validator/notBlank';
 import LengthValidator from './../../lib/validator/validator/length';
@@ -102,7 +103,9 @@ class AppComponent extends React.Component {
                         </div>
 
                         <div className="col-sm-12 text-right">
-                            <button type="submit" className="btn btn-success">Submit</button>
+                            <FormSubmitComponent>
+                                Submit
+                            </FormSubmitComponent>
                         </div>
                     </FormComponent>
                 </div>
