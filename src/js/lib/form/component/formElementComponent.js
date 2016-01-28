@@ -1,5 +1,6 @@
 import React from 'react';
 import * as formElementStatus from './../constant/formElementStatus';
+import ValidationCollection from './../../validator/collection/validatorCollection';
 
 /**
  * @author Gijs Nieuwenhuis <gijs.nieuwenhuis@freshheads.com>
@@ -97,15 +98,6 @@ class FormElementComponent extends React.Component {
     }
 
     /**
-     * @returns {Boolean}
-     *
-     * @private
-     */
-    _hasValidators() {
-        return _.isObject(this.props.validators);
-    }
-
-    /**
      * @protected
      */
     _validate() {
@@ -124,7 +116,7 @@ class FormElementComponent extends React.Component {
      * @private
      */
     _getCurrentErrors() {
-        return this._hasValidators() ? this.props.validators.validate(this.state.value) : [];
+        return this.props.validators.validate(this.state.value);
     }
 
     /**
@@ -146,7 +138,7 @@ FormElementComponent.defaultProps = {
     onValid: null,
     className: 'form-control',
     value: null,
-    validators: null,
+    validators: new ValidationCollection(),
     validateOnChange: false
 };
 
