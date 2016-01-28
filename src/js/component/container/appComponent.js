@@ -103,7 +103,7 @@ class AppComponent extends React.Component {
                         </div>
 
                         <div className="col-sm-12 text-right">
-                            <FormSubmitComponent>
+                            <FormSubmitComponent identifier="only-submit">
                                 Submit
                             </FormSubmitComponent>
                         </div>

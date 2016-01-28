@@ -1,4 +1,5 @@
 import React from 'react';
+import { generateFormElementId } from './../helper/identifierHelper';
 
 /**
  * @author Gijs Nieuwenhuis <gijs.nieuwenhuis@freshheads.com>
@@ -11,6 +12,8 @@ class FormSubmitComponent extends React.Component {
     render() {
         return (
             <button type="submit"
+                    id={generateFormElementId(this.props.identifier)}
+                    name={this.props.identifier}
                     className={this.props.className}
                     disabled={this.props.isDisabled}>
                 {this.props.children}
@@ -25,6 +28,7 @@ FormSubmitComponent.defaultProps = {
 };
 
 FormSubmitComponent.propTypes = {
+    identifier: React.PropTypes.string.isRequired,
     className: React.PropTypes.string.isRequired,
     isDisabled: React.PropTypes.bool.isRequired
 };
