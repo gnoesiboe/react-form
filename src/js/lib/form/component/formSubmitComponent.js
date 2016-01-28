@@ -10,7 +10,9 @@ class FormSubmitComponent extends React.Component {
      */
     render() {
         return (
-            <button type="submit" className={this.props.className}>
+            <button type="submit"
+                    className={this.props.className}
+                    disabled={this.props.isDisabled}>
                 {this.props.children}
             </button>
         );
@@ -18,11 +20,13 @@ class FormSubmitComponent extends React.Component {
 }
 
 FormSubmitComponent.defaultProps = {
-    className: 'btn btn-success'
+    className: 'btn btn-success',
+    isDisabled: false
 };
 
 FormSubmitComponent.propTypes = {
-    className: React.PropTypes.string.isRequired
+    className: React.PropTypes.string.isRequired,
+    isDisabled: React.PropTypes.bool.isRequired
 };
 
 export default FormSubmitComponent;
