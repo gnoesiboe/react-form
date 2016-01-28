@@ -49,15 +49,29 @@ export function checkComponentHasChildren(component) {
 /**
  * @param {Array} children
  * @param {Function} callback
+ */
+export function forEachFormElementChild(children, callback) {
+    React.Children.forEach(children, child => {
+        if (typeof child.type !== 'undefined' && _.isFunction(child.type) && checkIsFormElement(child.type)) {
+            callback(child);
+        }
+
+        if (checkComponentHasChildren(child)) {
+            forEachFormElementChild(child.props.children, callback);
+        }
+    });
+}
+
+/**
+ * @param {Array} children
+ * @param {Function} callback
  *
  * @returns {Array}
  */
 export function cloneChildFormElements(children, callback) {
     return React.Children.map(children, child => {
-        if (typeof child.type !== 'undefined' && _.isFunction(child.type)) {
-            if (checkIsFormElement(child.type)) {
-                child = callback(child);
-            }
+        if (typeof child.type !== 'undefined' && _.isFunction(child.type) && checkIsFormElement(child.type)) {
+            child = callback(child);
         }
 
         if (checkComponentHasChildren(child)) {

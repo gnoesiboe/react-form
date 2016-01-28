@@ -1,8 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
 import FormElementComponent from './formElementComponent';
-import FormInputComponent from './formInputComponent';
-import { checkIsFormElement, cloneChildFormElements, checkComponentHasChildren, extractValuesFromChildFormElements } from './../helper/componentChildHelper';
+import FormGroupComponent from './formGroupComponent'
+import * as componentChildHelper from './../helper/componentChildHelper';
 
 /**
  * @author Gijs Nieuwenhuis <gijs.nieuwenhuis@freshheads.com>
@@ -29,7 +29,7 @@ class FormComponent extends React.Component {
         var newValues = _.extend(
             {},
             this.state.values,
-            extractValuesFromChildFormElements(this._children)
+            componentChildHelper.extractValuesFromChildFormElements(this._children)
         );
 
         var stateUpdates = {
@@ -113,7 +113,7 @@ class FormComponent extends React.Component {
      * @see https://facebook.github.io/react/blog/2015/03/03/react-v0.13-rc2.html#react.cloneelement
      */
     _augmentChildFormGroups(children) {
-        return cloneChildFormElements(
+        return componentChildHelper.cloneChildFormElements(
             children,
             child => this._cloneChildAndAppendListeners(child)
         );
