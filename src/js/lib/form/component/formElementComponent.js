@@ -60,7 +60,7 @@ class FormElementComponent extends React.Component {
      */
     _emitValid(display = true) {
         if (_.isFunction(this.props.onValid)) {
-            this.props.onValid(display);
+            this.props.onValid(this.props.identifier, display);
         }
     }
 
@@ -72,7 +72,7 @@ class FormElementComponent extends React.Component {
      */
     _emitInvalid(errors, display = true) {
         if (_.isFunction(this.props.onInvalid)) {
-            this.props.onInvalid(errors, display);
+            this.props.onInvalid(this.props.identifier, errors, display);
         }
     }
 

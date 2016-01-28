@@ -15,11 +15,21 @@ class FormComponent extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            values: {}
-        };
+        this.state = FormComponent._getInitialState();
 
         this._children = null;
+    }
+
+    /**
+     * @returns {Object}
+     *
+     * @private
+     */
+    static _getInitialState() {
+        return {
+            values: {},
+            errors: {}
+        };
     }
 
     /**
@@ -87,19 +97,34 @@ class FormComponent extends React.Component {
     }
 
     /**
-     * @param {Array} errors
-     *
      * @private
      */
-    _onFieldInvalid(errors) {
-
+    _onFieldInvalid(fieldIdentifier) {
+        this._setFieldErrorState(fieldIdentifier, false);
     }
 
     /**
      * @private
      */
-    _onFieldValid() {
-        
+    _onFieldValid(fieldIdentifier) {
+        this._setFieldErrorState(fieldIdentifier, true);
+    }
+
+    /**
+     * @param {String} fieldIdentifier
+     * @param {Boolean} isValid
+     *
+     * @private
+     */
+    _setFieldErrorState(fieldIdentifier, isValid) {
+        var errors = this.state.errors;
+        errors[fieldIdentifier] = isValid;
+
+        this.setState({
+            errors: errors
+        }, function () {
+            console.log(this.state.errors);
+        });
     }
 
     /**

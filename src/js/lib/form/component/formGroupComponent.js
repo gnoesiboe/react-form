@@ -48,12 +48,13 @@ class FormGroupComponent extends React.Component {
     }
 
     /**
+     * @param {String} fieldIdentifier
      * @param {Array} errors
      * @param {Boolean} display
      *
      * @private
      */
-    _onFieldInvalid(errors, display) {
+    _onFieldInvalid(fieldIdentifier, errors, display) {
         this.setState({
             validationErrors: errors,
             status: STATUS_ERROR,
@@ -62,11 +63,12 @@ class FormGroupComponent extends React.Component {
     }
 
     /**
+     * @param {String} fieldIdentifier
      * @param {Boolean} display
      *
      * @private
      */
-    _onFieldValid(display) {
+    _onFieldValid(fieldIdentifier, display) {
         this.setState({
             validationErrors: [],
             status: STATUS_SUCCESS,
