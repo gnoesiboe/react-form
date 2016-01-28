@@ -26,6 +26,13 @@ class FormComponent extends React.Component {
      * @inheritDoc
      */
     componentDidMount() {
+        this._importInitialValuesStateFromChildFormElements();
+    }
+
+    /**
+     * @private
+     */
+    _importInitialValuesStateFromChildFormElements() {
         var newValues = _.extend(
             {},
             this.state.values,
