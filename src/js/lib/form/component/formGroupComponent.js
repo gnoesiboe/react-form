@@ -82,31 +82,19 @@ class FormGroupComponent extends React.Component {
      * @private
      */
     _cloneChildAndAppendListeners(child) {
-        var currentProps = typeof child.props !== 'undefined' ? child.props : {},
-            newOnValueChange = this._onFieldValueChange.bind(this),
-            newOnInvalid = this._onFieldInvalid.bind(this),
-            newOnValid = this._onFieldValid.bind(this);
+        var currentProps = typeof child.props !== 'undefined' ? child.props : {};
 
-        if (typeof currentProps.onValueChange !== 'undefined' && _.isFunction(currentProps.onValueChange)) {
-            newOnValueChange = (identifier, newValue) => {
-                currentProps.onValueChange(identifier, newValue);
-                this._onFieldValueChange(identifier, newValue);
-            };
-        }
+        var newOnValueChange = typeof currentProps.onValueChange === 'undefined' || !_.isFunction(currentProps.onValueChange)
+            ? this._onFieldValueChange.bind(this)
+            : componentChildHelper.wrapEventListener(currentProps.onValueChange, this._onFieldValueChange.bind(this));
 
-        if (typeof currentProps.onInvalid !== 'undefined' && _.isFunction(currentProps.onInvalid)) {
-            newOnInvalid = (error) => {
-                currentProps.onInvalid(error);
-                this._onFieldInvalid(error);
-            };
-        }
+        var newOnInvalid = typeof currentProps.onInvalid === 'undefined' || !_.isFunction(currentProps.onInvalid)
+            ? this._onFieldInvalid.bind(this)
+            : componentChildHelper.wrapEventListener(currentProps.onInvalid, this._onFieldInvalid.bind(this));
 
-        if (typeof currentProps.onValid !== 'undefined' && _.isFunction(currentProps.onValid)) {
-            newOnValid = () => {
-                currentProps.onValid();
-                this._onFieldValid();
-            };
-        }
+        var newOnValid = typeof currentProps.onValid === 'undefined' || !_.isFunction(currentProps.onValid)
+            ? this._onFieldValid.bind(this)
+            : componentChildHelper.wrapEventListener(currentProps.onValid, this._onFieldValid.bind(this));
 
         return React.cloneElement(child, {
             onValueChange: newOnValueChange,

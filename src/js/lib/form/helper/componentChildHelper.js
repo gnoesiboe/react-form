@@ -85,6 +85,24 @@ export function cloneChildFormElements(children, callback) {
 }
 
 /**
+ * Takes two event listeners and wraps them into a one new event listener that calls both other
+ * event listeners.
+ *
+ * @param {Function} currentEventListener
+ * @param {Function} additionalEventListener
+ *
+ * @returns {Object}
+ */
+export function wrapEventListener(currentEventListener, additionalEventListener) {
+    return function () {
+
+        // suply null to context to remain the original context of the listener
+        currentEventListener.apply(null, arguments);
+        additionalEventListener.apply(null, arguments);
+    };
+}
+
+/**
  * @param {Array} children
  *
  * @returns {Object}
