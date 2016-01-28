@@ -43,7 +43,7 @@ class FormGroupComponent extends React.Component {
      * @private
      */
     _onFieldValueChange(identifier, newValue) {
-        console.log('on field value change in form group: ', identifier, newValue);
+        //@todo still in use? Otherwise remove callback
     }
 
     /**

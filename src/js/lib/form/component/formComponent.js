@@ -76,9 +76,7 @@ class FormComponent extends React.Component {
             values: newValues
         };
 
-        this.setState(stateUpdates, () => {
-            console.log('new values state:', this.state.values);
-        });
+        this.setState(stateUpdates);
     }
 
     /**
