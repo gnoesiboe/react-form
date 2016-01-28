@@ -16,6 +16,20 @@ class FormElementComponent extends React.Component {
     }
 
     /**
+     * @inheritDoc
+     */
+    componentDidMount() {
+
+        // emit invalid state if this field has validation errors directly after mount, to let the form know
+        // that it cannot submit yet
+        if (this._getCurrentErrors().length > 0) {
+            this._emitInvalid(this._getCurrentErrors(), false);
+        } else {
+            this._emitValid(false);
+        }
+    }
+
+    /**
      * @param {Object} event
      *
      * @protected
@@ -40,22 +54,25 @@ class FormElementComponent extends React.Component {
     }
 
     /**
+     * @param {Boolean=} display
+     *
      * @protected
      */
-    _emitValid() {
+    _emitValid(display = true) {
         if (_.isFunction(this.props.onValid)) {
-            this.props.onValid();
+            this.props.onValid(display);
         }
     }
 
     /**
      * @param {Array} errors
+     * @param {Boolean=} display
      *
      * @protected
      */
-    _emitInvalid(errors) {
+    _emitInvalid(errors, display = true) {
         if (_.isFunction(this.props.onInvalid)) {
-            this.props.onInvalid(errors);
+            this.props.onInvalid(errors, display);
         }
     }
 
@@ -80,18 +97,34 @@ class FormElementComponent extends React.Component {
     }
 
     /**
+     * @returns {Boolean}
+     *
+     * @private
+     */
+    _hasValidators() {
+        return _.isObject(this.props.validators);
+    }
+
+    /**
      * @protected
      */
     _validate() {
-        if (_.isObject(this.props.validators)) {
-            var errors = this.props.validators.validate(this.state.value);
+        var errors = this._getCurrentErrors();
 
-            if (errors.length > 0) {
-                this._emitInvalid(errors);
-            } else {
-                this._emitValid();
-            }
+        if (errors.length > 0) {
+            this._emitInvalid(errors);
+        } else {
+            this._emitValid();
         }
+    }
+
+    /**
+     * @returns {Array}
+     *
+     * @private
+     */
+    _getCurrentErrors() {
+        return this._hasValidators() ? this.props.validators.validate(this.state.value) : [];
     }
 
     /**

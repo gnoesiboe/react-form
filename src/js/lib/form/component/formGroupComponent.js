@@ -18,7 +18,8 @@ class FormGroupComponent extends React.Component {
 
         this.state = {
             status: STATUS_PENDING,
-            validationErrors: []
+            validationErrors: [],
+            displayValidationStatus: false
         };
     }
 
@@ -48,23 +49,28 @@ class FormGroupComponent extends React.Component {
 
     /**
      * @param {Array} errors
+     * @param {Boolean} display
      *
      * @private
      */
-    _onFieldInvalid(errors) {
+    _onFieldInvalid(errors, display) {
         this.setState({
             validationErrors: errors,
-            status: STATUS_ERROR
+            status: STATUS_ERROR,
+            displayValidationStatus: display
         });
     }
 
     /**
+     * @param {Boolean} display
+     *
      * @private
      */
-    _onFieldValid() {
+    _onFieldValid(display) {
         this.setState({
             validationErrors: [],
-            status: STATUS_SUCCESS
+            status: STATUS_SUCCESS,
+            displayValidationStatus: display
         });
     }
 
@@ -117,22 +123,33 @@ class FormGroupComponent extends React.Component {
     _defineClassName() {
         var out = ['form-group'];
 
-        switch (this.state.status) {
-            case STATUS_ERROR:
-                out.push('has-error');
-                out.push('has-feedback');
-                break;
+        if (this.state.displayValidationStatus) {
+            switch (this.state.status) {
+                case STATUS_ERROR:
+                    out.push('has-error');
+                    out.push('has-feedback');
+                    break;
 
-            case STATUS_SUCCESS:
-                out.push('has-success');
-                out.push('has-feedback');
-                break;
+                case STATUS_SUCCESS:
+                    out.push('has-success');
+                    out.push('has-feedback');
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
+            }
         }
 
         return out.join(' ');
+    }
+
+    /**
+     * @returns {boolean}
+     *
+     * @private
+     */
+    _checkShouldWeDisplayErrors() {
+        return this.state.displayValidationStatus && this.state.status === STATUS_ERROR && this.state.validationErrors.length > 0;
     }
 
     /**
@@ -141,7 +158,7 @@ class FormGroupComponent extends React.Component {
      * @private
      */
     _renderErrorList() {
-        if (this.state.status !== STATUS_ERROR || this.state.validationErrors.length === 0) {
+        if (!this._checkShouldWeDisplayErrors()) {
             return null;
         }
 
@@ -159,12 +176,21 @@ class FormGroupComponent extends React.Component {
     }
 
     /**
+     * @returns {Boolean}
+     *
+     * @private
+     */
+    _checkShouldWeDisplayStatusGlyphicon() {
+        return this.state.status !== STATUS_PENDING && this.state.displayValidationStatus === true;
+    }
+
+    /**
      * @returns {XML|null}
      *
      * @private
      */
     _renderGlyphicon() {
-        if (this.state.status === STATUS_PENDING) {
+        if (!this._checkShouldWeDisplayStatusGlyphicon()) {
             return null;
         }
 
