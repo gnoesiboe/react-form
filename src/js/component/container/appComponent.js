@@ -62,6 +62,7 @@ class AppComponent extends React.Component {
                             <FormGroupComponent>
                                 <FormLabelComponent identifier="first-name">First name</FormLabelComponent>
                                 <FormInputComponent identifier="first-name"
+                                                    validateOnChange={true}
                                                     validators={ new ValidatorCollection([new NotBlankValidator(), new LengthValidator(3, 5)]) } />
                             </FormGroupComponent>
                         </div>

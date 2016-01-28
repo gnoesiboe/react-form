@@ -30,8 +30,12 @@ class FormElementComponent extends React.Component {
      * @protected
      */
     _onChangeAppliedToInternalState() {
-        if (this.props.onValueChange) {
+        if (_.isFunction(this.props.onValueChange)) {
             this.props.onValueChange(this.props.identifier, this.state.value);
+        }
+
+        if (this.props.validateOnChange) {
+            this._validate();
         }
     }
 
@@ -109,7 +113,8 @@ FormElementComponent.defaultProps = {
     onValid: null,
     className: 'form-control',
     value: null,
-    validators: null
+    validators: null,
+    validateOnChange: false
 };
 
 FormElementComponent.propTypes = {
@@ -119,7 +124,8 @@ FormElementComponent.propTypes = {
     identifier: React.PropTypes.string.isRequired,
     className: React.PropTypes.string,
     value: React.PropTypes.string,
-    validators: React.PropTypes.object
+    validators: React.PropTypes.object,
+    validateOnChange: React.PropTypes.bool.isRequired
 };
 
 export default FormElementComponent;
