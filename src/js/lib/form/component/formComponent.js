@@ -17,7 +17,8 @@ class FormComponent extends React.Component {
 
         this.state = FormComponent._getInitialState();
 
-        this._children = null;
+        this._childrenBlueprints = null;
+        this._childrenInstances = [];
     }
 
     /**
@@ -40,13 +41,21 @@ class FormComponent extends React.Component {
     }
 
     /**
+     * @inheritdoc
+     */
+    componentWillUnmount() {
+        this._childrenBlueprints =  null;
+        this._childrenInstances = [];
+    }
+
+    /**
      * @private
      */
     _importInitialValuesStateFromChildFormElements() {
         var newValues = _.extend(
             {},
             this.state.values,
-            componentChildHelper.extractValuesFromChildFormElements(this._children)
+            componentChildHelper.extractValuesFromChildFormElements(this._childrenBlueprints)
         );
 
         var stateUpdates = {
@@ -128,6 +137,15 @@ class FormComponent extends React.Component {
     }
 
     /**
+     * @param {FormElementComponent} mountedComponent
+     *
+     * @private
+     */
+    _onFieldMounted(mountedComponent) {
+        this._childrenInstances.push(mountedComponent);
+    }
+
+    /**
      * @param {React.Component} child
      *
      * @returns {React.Component}
@@ -149,10 +167,19 @@ class FormComponent extends React.Component {
             ? this._onFieldValid.bind(this)
             : componentChildHelper.wrapEventListener(currentProps.onValid, this._onFieldValid.bind(this));
 
+        var newRef = typeof currentProps.ref === 'undefined' || !_.isFunction(currentProps.ref)
+            ? this._onFieldMounted.bind(this)
+            : componentChildHelper.wrapEventListener(currentProps.ref, this._onFieldMounted.bind(this));
+
         return React.cloneElement(child, {
+
+            // add some event listeners to be able to track for changes
             onValueChange: newOnValueChange,
             onInvalid: newOnInvalid,
-            onValid: newOnValid
+            onValid: newOnValid,
+
+            // hold a reference to the mounted component to be able to talk to it
+            ref: newRef
         });
     }
 
@@ -176,7 +203,7 @@ class FormComponent extends React.Component {
      * @returns {XML}
      */
     render() {
-        this._children = this._augmentChildFormGroups(this.props.children);
+        this._childrenBlueprints = this._augmentChildFormGroups(this.props.children);
 
         return (
             <form action="#"
@@ -184,7 +211,7 @@ class FormComponent extends React.Component {
                   className="form"
                   onSubmit={this._onSubmit.bind(this)}>
 
-                {this._children}
+                {this._childrenBlueprints}
             </form>
         );
     }
