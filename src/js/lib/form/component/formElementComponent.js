@@ -98,6 +98,13 @@ class FormElementComponent extends React.Component {
     }
 
     /**
+     * @public
+     */
+    validate() {
+        this._validate();
+    }
+
+    /**
      * @protected
      */
     _validate() {

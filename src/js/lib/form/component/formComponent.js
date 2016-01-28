@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import FormElementComponent from './formElementComponent';
+import FormSubmitComponent from './formSubmitComponent';
 import FormGroupComponent from './formGroupComponent'
 import * as componentChildHelper from './../helper/componentChildHelper';
 
@@ -75,7 +76,18 @@ class FormComponent extends React.Component {
         // prevent backend submission
         event.preventDefault();
 
+        this._validate();
+
         this.props.onSubmit(this.state.values);
+    }
+
+    /**
+     * @private
+     */
+    _validate() {
+        this._childrenInstances.forEach(child => {
+            child.validate();
+        });
     }
 
     /**
@@ -131,8 +143,6 @@ class FormComponent extends React.Component {
 
         this.setState({
             errors: errors
-        }, function () {
-            console.log(this.state.errors);
         });
     }
 
@@ -142,7 +152,9 @@ class FormComponent extends React.Component {
      * @private
      */
     _onFieldMounted(mountedComponent) {
-        this._childrenInstances.push(mountedComponent);
+        if (mountedComponent instanceof FormElementComponent || mountedComponent instanceof FormSubmitComponent) {
+            this._childrenInstances.push(mountedComponent);
+        }
     }
 
     /**
