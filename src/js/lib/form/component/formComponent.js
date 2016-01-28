@@ -87,6 +87,22 @@ class FormComponent extends React.Component {
     }
 
     /**
+     * @param {Array} errors
+     *
+     * @private
+     */
+    _onFieldInvalid(errors) {
+
+    }
+
+    /**
+     * @private
+     */
+    _onFieldValid() {
+        
+    }
+
+    /**
      * @param {React.Component} child
      *
      * @returns {React.Component}
@@ -100,8 +116,18 @@ class FormComponent extends React.Component {
             ? this._onFieldValueChange.bind(this)
             : componentChildHelper.wrapEventListener(currentProps.onValueChange, this._onFieldValueChange.bind(this));
 
+        var newOnInvalid = typeof currentProps.onInvalid === 'undefined' || !_.isFunction(currentProps.onInvalid)
+            ? this._onFieldInvalid.bind(this)
+            : componentChildHelper.wrapEventListener(currentProps.onInvalid, this._onFieldInvalid.bind(this));
+
+        var newOnValid = typeof currentProps.onValid === 'undefined' || !_.isFunction(currentProps.onValid)
+            ? this._onFieldValid.bind(this)
+            : componentChildHelper.wrapEventListener(currentProps.onValid, this._onFieldValid.bind(this));
+
         return React.cloneElement(child, {
-            onValueChange: newOnValueChange
+            onValueChange: newOnValueChange,
+            onInvalid: newOnInvalid,
+            onValid: newOnValid
         });
     }
 
