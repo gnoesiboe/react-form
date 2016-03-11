@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import Validator from './../validator';
 
-var _defaultInvalidMinLengthMessage = 'Minimal length required of {minLength} characters';
-var _defaultInvalidMaxLengthMessage = 'Maximum length required of {maxLength} characters';
+const DEFAULT_INVALID_MINLENGTH_MESSAGE = 'Minimal length required of {minLength} characters';
+const DEFAULT_INVALID_MAX_LENGTH_MESSAGE = 'Maximum length required of {maxLength} characters';
 
 /**
  * @author Gijs Nieuwenhuis <gijs.nieuwenhuis@freshheads.com>
@@ -18,8 +18,8 @@ class LengthValidator extends Validator {
     constructor(
         minLength = null,
         maxLength = null,
-        invalidMinLengthMessage = _defaultInvalidMinLengthMessage,
-        invalidMaxLengthmessage = _defaultInvalidMaxLengthMessage
+        invalidMinLengthMessage = DEFAULT_INVALID_MINLENGTH_MESSAGE,
+        invalidMaxLengthmessage = DEFAULT_INVALID_MAX_LENGTH_MESSAGE
     ) {
         super();
 
