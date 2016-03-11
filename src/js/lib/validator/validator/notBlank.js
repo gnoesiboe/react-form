@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Validator from './../validator';
 
-var _defaultInvalidMessage = 'Cannot be blank';;
+const DEFAULT_INVALID_MESSAGE = 'Cannot be blank';;
 
 /**
  * @author Gijs Nieuwenhuis <gijs.nieuwenhuis@freshheads.com>
@@ -11,7 +11,7 @@ class NotBlankValidator extends Validator {
     /**
      * @param {String=} invalidMessage
      */
-    constructor(invalidMessage = _defaultInvalidMessage) {
+    constructor(invalidMessage = DEFAULT_INVALID_MESSAGE) {
         super();
 
         this._invalidMessage = invalidMessage;

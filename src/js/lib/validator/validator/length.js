@@ -30,9 +30,9 @@ class LengthValidator extends Validator {
     }
 
     /**
-     * @param {String} value
+     * @inheritDoc
      *
-     * @returns {boolean}
+     * @param {String} value
      */
     validate(value) {
         if (!_.isString(value)) {
