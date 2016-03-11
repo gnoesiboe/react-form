@@ -111,7 +111,7 @@ class FormGroupComponent extends React.Component {
      * @private
      */
     _defineClassName() {
-        var out = ['form-group'];
+        var out = [this.props.className];
 
         if (this.state.displayValidationStatus) {
             switch (this.state.status) {
@@ -179,8 +179,8 @@ class FormGroupComponent extends React.Component {
      *
      * @private
      */
-    _renderGlyphicon() {
-        if (!this._checkShouldWeDisplayStatusGlyphicon()) {
+    _renderFeedbackGlyphicon() {
+        if (!this._checkShouldWeDisplayStatusGlyphicon() || !this.props.renderFeedbackGlyphicon) {
             return null;
         }
 
@@ -199,10 +199,8 @@ class FormGroupComponent extends React.Component {
                 throw new Error(`Status ${this.state.status} not supported`);
         }
 
-        var className = `glyphicon ${glyphicon} form-control-feedback`;
-
         return (
-            <span className={className} />
+            <span className={`glyphicon ${glyphicon} form-control-feedback`} />
         );
     }
 
@@ -216,7 +214,7 @@ class FormGroupComponent extends React.Component {
             <div className={this._defineClassName()}>
                 {children}
 
-                {this._renderGlyphicon()}
+                {this._renderFeedbackGlyphicon()}
                 {this._renderErrorList()}
             </div>
         );
@@ -224,11 +222,15 @@ class FormGroupComponent extends React.Component {
 }
 
 FormGroupComponent.defaultProps = {
-    onValueChange: null
+    onValueChange: null,
+    className: 'form-group',
+    renderFeedbackGlyphicon: true
 };
 
 FormGroupComponent.propTypes = {
-    onValueChange: React.PropTypes.func
+    onValueChange: React.PropTypes.func,
+    className: React.PropTypes.string,
+    renderFeedbackGlyphicon: React.PropTypes.bool.isRequired
 };
 
 export default FormGroupComponent;

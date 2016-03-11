@@ -2,6 +2,7 @@ import React from 'react';
 import * as reactRedux from 'react-redux';
 import * as actionFactory from '../../actions/actionFactory';
 import * as stateNamespace from './../../stateNamespace';
+
 import FormComponent from './../../lib/form/component/formComponent';
 import FormInputComponent from './../../lib/form/component/formInputComponent';
 import FormLabelComponent from './../../lib/form/component/formLabelComponent';
@@ -9,6 +10,8 @@ import FormGroupComponent from './../../lib/form/component/formGroupComponent';
 import FormTextareaComponent from './../../lib/form/component/formTextareaComponent';
 import FormSelectComponent from './../../lib/form/component/formSelectComponent';
 import FormSubmitComponent from './../../lib/form/component/formSubmitComponent';
+import FormCheckboxComponent from './../../lib/form/component/formCheckboxComponent';
+
 import ValidatorCollection from './../../lib/validator/collection/validatorCollection';
 import NotBlankValidator from './../../lib/validator/validator/notBlank';
 import LengthValidator from './../../lib/validator/validator/length';
@@ -99,6 +102,18 @@ class AppComponent extends React.Component {
                                 <FormInputComponent identifier="website"
                                                     value="http://"
                                                     validators={ new ValidatorCollection([new NotBlankValidator()]) } />
+                            </FormGroupComponent>
+                        </div>
+
+                        <div className="col-sm-12">
+                            <FormGroupComponent
+                                className="checkbox clearfix"
+                                renderFeedbackGlyphicon={false}
+                            >
+                                <FormLabelComponent identifier="aggreed-to-terms">
+                                    <FormCheckboxComponent identifier="aggreed-to-terms"/>
+                                    Aggreed to terms
+                                </FormLabelComponent>
                             </FormGroupComponent>
                         </div>
 

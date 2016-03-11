@@ -268,6 +268,8 @@ class FormComponent extends React.Component {
     }
 
     /**
+     * @inheritDoc
+     *
      * @returns {XML}
      */
     render() {
@@ -285,7 +287,12 @@ class FormComponent extends React.Component {
     }
 }
 
+FormComponent.defaultProps = {
+    children: []
+};
+
 FormComponent.propTypes = {
+    children: React.PropTypes.array.isRequired,
     onSubmit: React.PropTypes.func.isRequired
 };
 
