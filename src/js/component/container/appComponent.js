@@ -15,6 +15,7 @@ import FormCheckboxComponent from './../../lib/form/component/formCheckboxCompon
 import ValidatorCollection from './../../lib/validator/collection/validatorCollection';
 import NotBlankValidator from './../../lib/validator/validator/notBlank';
 import LengthValidator from './../../lib/validator/validator/length';
+import IsValidator from './../../lib/validator/validator/is';
 
 /**
  * @author Gijs Nieuwenhuis <gijs.nieuwenhuis@freshheads.com>
@@ -111,7 +112,10 @@ class AppComponent extends React.Component {
                                 renderFeedbackGlyphicon={false}
                             >
                                 <FormLabelComponent identifier="aggreed-to-terms">
-                                    <FormCheckboxComponent identifier="aggreed-to-terms"/>
+                                    <FormCheckboxComponent
+                                        identifier="aggreed-to-terms"
+                                        validators={ new ValidatorCollection([new IsValidator(true, 'You need to aggree to the terms')]) }
+                                    />
                                     Aggreed to terms
                                 </FormLabelComponent>
                             </FormGroupComponent>
