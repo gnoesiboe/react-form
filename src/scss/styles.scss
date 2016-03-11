@@ -1,4 +1,12 @@
 @import 'vars';
 @import 'bootstrap-modules';
 
-// Modules
+// fix for feedback sign in form control that is not correctly positioned for selects
+// @see https://github.com/twbs/bootstrap/issues/14202
+select ~ .form-control-feedback {
+    margin-right: 15px;
+}
+
+select[multiple] ~ .form-control-feedback {
+    margin-right: 0;
+}
